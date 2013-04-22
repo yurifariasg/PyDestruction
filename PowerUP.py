@@ -1,17 +1,12 @@
-'''
-Created on Oct 16, 2012
 
-@author: yurifariasg
-'''
 
 class PowerUP(object):
-    '''
-    classdocs
-    '''
 
-
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        
+    def __init__(self, lives = 0, speed = 0, bombs = 0, range = 0):
+        self.attributes = {}
+        self.attributes['lives'] = lives
+        self.attributes['speed'] = speed
+        self.attributes['bombs'] = bombs
+        self.attributes['range'] = range
+    
+    
