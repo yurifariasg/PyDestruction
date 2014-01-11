@@ -14,10 +14,12 @@ class GameState(object):
 class Game(object):
 
     def __init__(self, screen):
-        self.map = Map.Map() # Number of Players
+        self.map = Map.Map()
         self.physics = Physics.Physics(self.map)
         self.screen = screen
         self.last_frame_time = 0
+        self.font = pygame.font.SysFont(Settings.DEFAULT_FONT_PATH, 35)
+        self.font_big = pygame.font.SysFont(Settings.DEFAULT_FONT_PATH, 60)
     
     def start_game(self):
         
@@ -36,10 +38,10 @@ class Game(object):
         lista_passB2 = [pygame.image.load("imagens/frentepasso1otacilio.png"),
                         pygame.image.load("imagens/paradofrenteotacilio.png"),
                         pygame.image.load("imagens/frentepasso2otacilio.png")]
-        paradoFrente2 = pygame.image.load("imagens/paradofrenteotacilio.png").convert_alpha()
-        paradoEsquerda2 = pygame.image.load("imagens/paradoesquerdaotacilio.png").convert_alpha()
-        paradoDireita2 = pygame.image.load("imagens/paradodireitaotacilio.png").convert_alpha()
-        paradoCima2 = pygame.image.load("imagens/paradocimaotacilio.png").convert_alpha()
+        parado_frente2 = pygame.image.load("imagens/paradofrenteotacilio.png").convert_alpha()
+        parado_esquerda2 = pygame.image.load("imagens/paradoesquerdaotacilio.png").convert_alpha()
+        parado_direita2 = pygame.image.load("imagens/paradodireitaotacilio.png").convert_alpha()
+        parado_cima2 = pygame.image.load("imagens/paradocimaotacilio.png").convert_alpha()
         
         lista_passE3 = [pygame.image.load("imagens/esquerdapasso1jorge.png"),
                         pygame.image.load("imagens/esquerdapasso2jorge.png"),
@@ -53,17 +55,17 @@ class Game(object):
         lista_passB3 = [pygame.image.load("imagens/frentepasso1jorge.png"),
                         pygame.image.load("imagens/paradofrentejorge.png"),
                         pygame.image.load("imagens/frentepasso2jorge.png")]
-        paradoFrente3 = pygame.image.load("imagens/paradofrentejorge.png").convert_alpha()
-        paradoEsquerda3 = pygame.image.load("imagens/paradoesquerdajorge.png").convert_alpha()
-        paradoDireita3 = pygame.image.load("imagens/paradodireitajorge.png").convert_alpha()
-        paradoCima3 = pygame.image.load("imagens/paradocimajorge.png").convert_alpha()
+        parado_frente3 = pygame.image.load("imagens/paradofrentejorge.png").convert_alpha()
+        parado_esquerda3 = pygame.image.load("imagens/paradoesquerdajorge.png").convert_alpha()
+        parado_direita3 = pygame.image.load("imagens/paradodireitajorge.png").convert_alpha()
+        parado_cima3 = pygame.image.load("imagens/paradocimajorge.png").convert_alpha()
         
         animation_images2 = {
                             'IDLE' : {
-                                      'UP' : [paradoCima2],
-                                      'RIGHT' : [paradoDireita2],
-                                      'LEFT' : [paradoEsquerda2],
-                                      'DOWN' : [paradoFrente2]},
+                                      'UP' : [parado_cima2],
+                                      'RIGHT' : [parado_direita2],
+                                      'LEFT' : [parado_esquerda2],
+                                      'DOWN' : [parado_frente2]},
                             'MOVING' : {
                                       'UP' : lista_passC2,
                                       'RIGHT' : lista_passD2,
@@ -72,10 +74,10 @@ class Game(object):
         
         animation_images3 = {
                             'IDLE' : {
-                                      'UP' : [paradoCima3],
-                                      'RIGHT' : [paradoDireita3],
-                                      'LEFT' : [paradoEsquerda3],
-                                      'DOWN' : [paradoFrente3]},
+                                      'UP' : [parado_cima3],
+                                      'RIGHT' : [parado_direita3],
+                                      'LEFT' : [parado_esquerda3],
+                                      'DOWN' : [parado_frente3]},
                             'MOVING' : {
                                       'UP' : lista_passC3,
                                       'RIGHT' : lista_passD3,
@@ -112,7 +114,7 @@ class Game(object):
         self.is_running = True
         self.currentState = GameState.GAME_RUNNING
         
-        while self.is_running: # screen.fill(tema_background)
+        while self.is_running:
             
             if self.currentState == GameState.GAME_RUNNING:
                 self.executeGame()
@@ -150,24 +152,24 @@ class Game(object):
         self.is_running = False
     
     def executeGame(self):
-        hasEnded = False
+        has_ended = False
         previous_pressed_keys = {}
         self.start_time = time()
-        while not hasEnded:
+        while not has_ended:
             self.screen.fill(Settings.BACKGROUND) # Clear Screen
             
             # Check Victory State
             if self.map.players[0].current_status.get('lives') <= 0:
-                hasEnded = True
+                has_ended = True
                 self.currentState = GameState.BOT_VICTORY
             elif self.map.players[1].current_status.get('lives') <= 0:
-                hasEnded = True
+                has_ended = True
                 self.currentState = GameState.PLAYER_VICTORY
             
             # Step 1: Get Input
             for e in pygame.event.get():
                 if e.type == pygame.QUIT or (e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE):
-                    hasEnded = True
+                    has_ended = True
                     self.is_running = False
                     
             key = pygame.key.get_pressed()
@@ -202,11 +204,11 @@ class Game(object):
             pygame.display.flip()
     
     def renderStatusBar(self, screen):
-        #Tela de Status
+        # Stats UI
         screen.blit(self.status_bar,(0,543))
 
-        # Status Player 1
-        """"bombs1 = self.font.render(str(self.map.players[0].current_status.get('bombs')), 1, (255,255,255))
+        # Stats Player 1
+        bombs1 = self.font.render(str(self.map.players[0].current_status.get('bombs')), 1, (255,255,255))
         life1 = self.font.render(str(self.map.players[0].current_status.get('lives')), 1, (255,255,255))
         speed1 = self.font.render(str(self.map.players[0].current_status.get('speed')), 1, (255,255,255))
         range1 = self.font.render(str(self.map.players[0].current_status.get('range')), 1, (255,255,255))
@@ -216,7 +218,7 @@ class Game(object):
         screen.blit(speed1, (190,576))
         screen.blit(bombs1, (259,576))
         
-        #Status Jogador 2
+        # Stats Player 2
         bombs2 = self.font.render(str(self.map.players[1].current_status.get('bombs')), 1, (255,255,255))
         life2 = self.font.render(str(self.map.players[1].current_status.get('lives')), 1, (255,255,255))
         speed2 = self.font.render(str(self.map.players[1].current_status.get('speed')), 1, (255,255,255))
@@ -227,11 +229,11 @@ class Game(object):
         screen.blit(speed2, (675,576))
         screen.blit(bombs2, (744,576))
         
-        #Tempo
+        # Time
 
-        tempoo = self.font_big.render(self.getFormatedTime(), 1, (255,255,255))
+        time_text = self.font_big.render(self.getFormatedTime(), 1, (255,255,255))
         
-        screen.blit(tempoo, (355,550))  """
+        screen.blit(time_text, (355,550))
         
     def getFormatedTime(self):
         current = time() - self.start_time

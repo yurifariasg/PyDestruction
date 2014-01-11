@@ -43,6 +43,8 @@ FIRE_VERTICAL_TOP_EDGE_PATH = "imagens/fire_cima.png"
 FIRE_VERTICAL_BOTTOM_EDGE_PATH = "imagens/fire_baix.png"
 FIRE_VERTICAL_PATH = "imagens/fire_vertical.png"
 
+DEFAULT_FONT_PATH = "fonts/Chonker.ttf"
+
 
 
 BOMB_ANIMATION = ["imagens/bomb3.png", "imagens/bomb2.png", "imagens/bomb.png"]
