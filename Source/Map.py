@@ -8,9 +8,10 @@ from Block import Block
 import PathNode
 
 class Map(object):
-    
+
+    # Pre-computed hard-coded positions.
     Y_POSITIONS = [32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480]
-    X_POSITIONS = [32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512, 544, 544+32, 544+64, 544+96, 544+128, 544+160,544+192]
+    X_POSITIONS = [32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512, 544, 576, 608, 640, 672, 704, 736]
 
 
     def __init__(self):
@@ -173,19 +174,7 @@ class Map(object):
                 return bomb
         return None
         
-    def get_nearest_block(self, position): # redo: time complexity
-        """
-        indexClosestX = 0
-        for i in range(1, len(Map.X_POSITIONS)):
-            if math.fabs(position[0] - Map.X_POSITIONS[i]) < math.fabs(position[0] - Map.X_POSITIONS[indexClosestX]):
-                indexClosestX = i
-        
-        indexClosestY = 0
-        for i in range(1, len(Map.Y_POSITIONS)):
-            if math.fabs(position[1] - Map.Y_POSITIONS[i]) < math.fabs(position[1] - Map.Y_POSITIONS[indexClosestY]):
-                indexClosestY = i
-        """
-        
+    def get_nearest_block(self, position):
         bPos = self.convertRealCoordinatesToBlockyCoordinates(position)
         
         return pygame.Rect(bPos[0] * Settings.BLOCK_SIZE, bPos[1] * Settings.BLOCK_SIZE,
